@@ -6,9 +6,10 @@ pygame.font.init()
 font = pygame.font.Font(None,36)
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self,x,y,direction = 1):
+    def __init__(self,level,x,y,direction = 1,):
         super().__init__()
-        self.health = 50
+        self.level = level
+        self.health = 100
         self.max_health = 100
         self.angle = 0
         self.power = 20
@@ -46,7 +47,7 @@ class Player(pygame.sprite.Sprite):
 
 
     def fire(self):
-        self.all_projectile.add(Projectile(self))
+        self.all_projectile.add(Projectile(self,self.level))
 
     def aim_up(self):
         if self.angle < 90:

@@ -5,8 +5,9 @@ import math
 pygame.init()
 
 class Projectile(pygame.sprite.Sprite):
-    def __init__(self, player):
+    def __init__(self, player,level):
         super().__init__()
+        self.level = level
         self.user = player
         self.image = pygame.image.load("assets_game_PT/boulet_de_canon-removebg-preview.png")
         self.image = pygame.transform.scale(self.image,(20,20))
@@ -30,5 +31,5 @@ class Projectile(pygame.sprite.Sprite):
         self.rect.x += int(self.vel_x) * self.user.direction
         self.rect.y += int(0.5 * self.gravity* self.time**2 +self.vel_y)
 
-        if self.rect.y > 550:
+        if self.rect.y >self.level.pos_y+ 30 :
             self.kill()

@@ -3,20 +3,21 @@ import pygame
 import time
 
 from game import Game
+from level import Level
 pygame.init()
 
 run = True
-ecran = pygame.display.set_mode((800,600),pygame.RESIZABLE)
 
+ecran = pygame.display.set_mode((800,600),pygame.RESIZABLE)
+level = Level(1,5)
 pygame.display.set_caption("CanonMaster")
 
-background = pygame.image.load("assets_game_PT/Background_1-fotor2.png").convert_alpha()
 
-game = Game()
+game = Game(level)
 
 while run: # Main loop for the game
 
-    ecran.blit(background,(0,0))
+    ecran.blit(level.image,(0,0))
 
     ecran.blit(game.player[0].image,(game.player[0].rect.x,game.player[0].rect.y))
     ecran.blit(game.player[1].image,(game.player[1].rect.x,game.player[1].rect.y))

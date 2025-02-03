@@ -2,9 +2,10 @@ import pygame
 from player import Player
 
 class Game:
-    def __init__(self):
+    def __init__(self,level):
+        super().__init__()
         self.all_players = pygame.sprite.Group
-        self.player =[Player(20,520,1),Player(1200,520,-1)]
+        self.player =[Player(level,20,level.pos_y,1),Player(level,1200,level.pos_y,-1)]
 
         for player in self.player:
             self.all_players.add(player)
