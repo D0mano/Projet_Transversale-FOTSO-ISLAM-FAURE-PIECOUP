@@ -16,7 +16,7 @@ class Projectile(pygame.sprite.Sprite):
         self.rect.y = self.user.rect.y + 20
 
 
-        self.gravity = 9.81
+        self.gravity = self.level.gravity
         self.angle =player.angle
         self.power = player.power
         self.vel_x = self.power * math.cos(math.radians(self.angle))
