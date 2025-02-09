@@ -19,12 +19,12 @@ while run: # Main loop for the game
 
     ecran.blit(level.image,(0,0))
 
-    ecran.blit(game.player[0].image,(game.player[0].rect.x,game.player[0].rect.y))
-    ecran.blit(game.player[1].image,(game.player[1].rect.x,game.player[1].rect.y))
-
+    ecran.blit(game.player[0].canon, game.player[0].rect.topleft)
+    ecran.blit(game.player[1].canon, game.player[1].rect.topleft)
 
     ecran.blit(game.player[game.current_player].show_info()[0],(game.player[game.current_player].rect.x + game.player[game.current_player].direction*50,650))
     ecran.blit(game.player[game.current_player].show_info()[1],(game.player[game.current_player].rect.x + game.player[game.current_player].direction*50,600))
+
     for players in game.player:
         for projectile in players.all_projectile:
             projectile.move()

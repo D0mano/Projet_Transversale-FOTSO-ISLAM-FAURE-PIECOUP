@@ -14,9 +14,12 @@ class Player(pygame.sprite.Sprite):
         self.angle = 0
         self.power = 20
         self.all_projectile = pygame.sprite.Group()
-        self.image = pygame.image.load("assets_game_PT/Canon_1-removebg-preview.png").convert_alpha()
-        self.image =pygame.transform.scale(self.image,(60,60))
-        self.rect = self.image.get_rect()
+        self.original_canon = pygame.image.load("assets_game_PT/Canon_1-removebg-preview.png").convert_alpha()
+        self.original_canon = pygame.transform.scale(self.original_canon,(60,60))
+        if direction == -1:
+            self.original_canon = pygame.transform.flip(self.original_canon,True,False)
+        self.canon = self.original_canon
+        self.rect = self.canon.get_rect()
         self.rect.x = x
         self.rect.y = y
         self.direction = direction
@@ -52,10 +55,14 @@ class Player(pygame.sprite.Sprite):
     def aim_up(self):
         if self.angle < 90:
             self.angle += 5
+            self.canon = pygame.transform.rotate(self.original_canon, self.angle * self.direction)
+            self.rect = self.canon.get_rect(center=self.rect.center)
 
     def aim_down(self):
         if self.angle > 0:
             self.angle -= 5
+            self.canon = pygame.transform.rotate(self.original_canon, self.angle * self.direction)
+            self.rect = self.canon.get_rect(center=self.rect.center)
 
     def power_up(self):
         if self.power < 100:
