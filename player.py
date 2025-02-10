@@ -6,9 +6,11 @@ pygame.font.init()
 font = pygame.font.Font(None,36)
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self,level,x,y,direction = 1,):
+    def __init__(self,game,level,x,y,direction = 1,):
         super().__init__()
+        self.game = game
         self.level = level
+        self.attack = 20
         self.health = 100
         self.max_health = 100
         self.angle = 0
@@ -50,7 +52,7 @@ class Player(pygame.sprite.Sprite):
 
 
     def fire(self):
-        self.all_projectile.add(Projectile(self,self.level))
+        self.all_projectile.add(Projectile(self,self.level,self.game))
 
     def aim_up(self):
         if self.angle < 90:
@@ -78,6 +80,10 @@ class Player(pygame.sprite.Sprite):
         power_text = font.render(f"Power: {self.power}",True,(255,255,255))
         return angle_text,power_text
 
+    def check_collision(self):
+        if pygame.sprite.spritecollide(self,self.all_projectile, True):
+            self.damage(5)
+            print("touché")
 
 
 

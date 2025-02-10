@@ -5,9 +5,10 @@ import math
 pygame.init()
 
 class Projectile(pygame.sprite.Sprite):
-    def __init__(self, player,level):
+    def __init__(self, player,level,game):
         super().__init__()
         self.level = level
+        self.game = game
         self.user = player
         self.image = pygame.image.load("assets_game_PT/boulet_de_canon-removebg-preview.png")
         self.image = pygame.transform.scale(self.image,(20,20))
@@ -22,10 +23,7 @@ class Projectile(pygame.sprite.Sprite):
         self.vel_x = self.power * math.cos(math.radians(self.angle))
         self.vel_y = -self.power * math.sin(math.radians(self.angle))
         self.time = 0
-    """
-    def check_collision(self,sprite,group):
-        return pygame.sprite.spritecollide(sprite,group,False,pygame.sprite.collide_mask())
-    """
+
     def move(self):
         self.time += 0.1
         self.rect.x += int(self.vel_x) * self.user.direction
@@ -33,3 +31,6 @@ class Projectile(pygame.sprite.Sprite):
 
         if self.rect.y >self.level.pos_y+ 30 :
             self.kill()
+        for players in self.game.check_collision(self,self.game.all_players):
+            self.kill()
+            players.damage(5)
