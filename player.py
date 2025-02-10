@@ -16,14 +16,20 @@ class Player(pygame.sprite.Sprite):
         self.angle = 0
         self.power = 20
         self.all_projectile = pygame.sprite.Group()
-        self.original_canon = pygame.image.load("assets_game_PT/Canon_1-removebg-preview.png").convert_alpha()
-        self.original_canon = pygame.transform.scale(self.original_canon,(60,60))
+        self.pied_canon = pygame.image.load("assets_game_PT/_pied_Canon_1-removebg-preview.png").convert_alpha()
+        self.pied_canon = pygame.transform.scale(self.pied_canon,(60,60))
+        self.original_canon = pygame.image.load("assets_game_PT/_Canon_2-removebg-preview.png").convert_alpha()
+        self.original_canon = pygame.transform.scale(self.original_canon, (60, 60))
         if direction == -1:
             self.original_canon = pygame.transform.flip(self.original_canon,True,False)
+            self.pied_canon = pygame.transform.flip(self.pied_canon,True,False)
         self.canon = self.original_canon
         self.rect = self.canon.get_rect()
         self.rect.x = x
         self.rect.y = y
+        self.rect_pied = self.pied_canon.get_rect()
+        self.rect_pied.x = x
+        self.rect_pied.y = y
         self.direction = direction
 
     def update_health_bar(self,surface):
