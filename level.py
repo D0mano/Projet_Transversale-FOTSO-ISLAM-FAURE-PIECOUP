@@ -8,9 +8,11 @@ class Level:
 
         self.image = pygame.image.load(self.background[level-1]).convert_alpha()
 
+
         if level == 1:
             self.pos_y = 520
             self.gravity = 10
+            self.blue_wall = pygame.image.load("blue_wall.png").convert()
         elif level == 2:
             self.pos_y = 590
             self.gravity = 3
