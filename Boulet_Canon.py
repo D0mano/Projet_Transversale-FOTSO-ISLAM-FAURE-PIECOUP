@@ -10,18 +10,28 @@ class Projectile(pygame.sprite.Sprite):
         self.level = level
         self.game = game
         self.user = player
+        self.shooter = player
         self.image = pygame.image.load("assets_game_PT/boulet_de_canon-removebg-preview.png")
         self.image = pygame.transform.scale(self.image,(20,20))
         self.rect = self.image.get_rect()
-        self.rect.x = self.user.rect.x + (50 * player.direction)
-        self.rect.y = self.user.rect.y + 20
 
+        canon_length = 5
+
+        angle_rad = math.radians(player.angle)
+        offset_x = canon_length * math.cos(angle_rad)
+        offset_y = canon_length * math.sin(angle_rad)
+
+        if player.direction == 1:
+            self.rect.x = player.rect.centerx - offset_x
+        else:
+            self.rect.x = player.rect.centerx + offset_x
+
+        self.rect.y = player.rect.centery - offset_y
 
         self.gravity = self.level.gravity
-        self.angle =player.angle
         self.power = player.power
-        self.vel_x = self.power * math.cos(math.radians(self.angle))
-        self.vel_y = -self.power * math.sin(math.radians(self.angle))
+        self.vel_x = self.power * math.cos(angle_rad)
+        self.vel_y = -self.power * math.sin(angle_rad)
         self.time = 0
 
     def move(self):
@@ -31,6 +41,8 @@ class Projectile(pygame.sprite.Sprite):
 
         if self.rect.y >self.level.pos_y+ 30 :
             self.kill()
-        for players in self.game.check_collision(self,self.game.all_players):
-            self.kill()
-            players.damage(5)
+
+        for player in self.game.check_collision(self,self.game.all_players):
+            if player != self.shooter:
+                self.kill()
+                player.damage(5)
