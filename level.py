@@ -1,4 +1,5 @@
 import pygame
+from obstacle import Obstacle
 pygame.init()
 
 class Level:
@@ -7,14 +8,14 @@ class Level:
                            "assets_game_PT/Background_space.png"]
 
         self.image = pygame.image.load(self.background[level-1]).convert_alpha()
-
+        self.lv_number =  level
 
 
         if level == 1:
             self.pos_y = 520
             self.gravity = 10
-            self.blue_wall = pygame.image.load("assets_game_PT/blue_wall.png").convert()
-            self.blue_wall = pygame.transform.scale(self.blue_wall, (10, 100))
+            self.obstacle = Obstacle(self,640,360)
+
         elif level == 2:
             self.pos_y = 590
             self.gravity = 3

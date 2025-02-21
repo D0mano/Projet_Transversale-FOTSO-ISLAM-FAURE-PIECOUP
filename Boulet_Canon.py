@@ -10,7 +10,6 @@ class Projectile(pygame.sprite.Sprite):
         self.level = level
         self.game = game
         self.user = player
-        self.shooter = player
         self.image = pygame.image.load("assets_game_PT/boulet_de_canon-removebg-preview.png")
         self.image = pygame.transform.scale(self.image,(20,20))
         self.rect = self.image.get_rect()
@@ -39,10 +38,10 @@ class Projectile(pygame.sprite.Sprite):
         self.rect.x += int(self.vel_x) * self.user.direction
         self.rect.y += int(0.5 * self.gravity* self.time**2 +self.vel_y)
 
-        if self.rect.y >self.level.pos_y+ 30 :
+        if self.rect.y >self.level.pos_y + 30 :
             self.kill()
 
         for player in self.game.check_collision(self,self.game.all_players):
-            if player != self.shooter:
+            if player != self.user:
                 self.kill()
                 player.damage(5)

@@ -18,7 +18,9 @@ game = Game(level)
 while run: # Main loop for the game
 
     ecran.blit(level.image,(0,0))
-    ecran.blit(level.blue_wall,(640,360))
+    level.obstacle.move_obstacle()
+    ecran.blit(level.obstacle.image, (level.obstacle.rect.x, level.obstacle.rect.y))
+
 
     ecran.blit(game.player[0].pied_canon, (game.player[0].rect_pied.x,game.player[0].rect_pied.y))
     ecran.blit(game.player[1].pied_canon, (game.player[1].rect_pied.x,game.player[1].rect_pied.y))
