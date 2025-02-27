@@ -45,3 +45,5 @@ class Projectile(pygame.sprite.Sprite):
             if player != self.user:
                 self.kill()
                 player.damage(5)
+        for obstacle in self.game.check_collision(self,self.level.all_obstacle):
+            self.kill()

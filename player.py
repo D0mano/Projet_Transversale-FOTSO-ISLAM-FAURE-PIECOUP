@@ -86,10 +86,6 @@ class Player(pygame.sprite.Sprite):
         power_text = font.render(f"Power: {self.power}",True,(255,255,255))
         return angle_text,power_text
 
-    def check_collision(self):
-        if pygame.sprite.spritecollide(self,self.all_projectile, True):
-            self.damage(5)
-            print("touché")
 
 
 

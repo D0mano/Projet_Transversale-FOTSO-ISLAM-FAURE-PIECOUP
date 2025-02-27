@@ -1,7 +1,6 @@
 
 import pygame
 import time
-
 from game import Game
 from level import Level
 pygame.init()
@@ -64,7 +63,7 @@ while run: # Main loop for the game
             elif event.key == pygame.K_DOWN:
                 game.player[game.current_player].aim_down()
 
-    time.sleep(game.player[game.current_player].power * 0.001)
+    time.sleep(0.02)
 
 
 pygame.quit()

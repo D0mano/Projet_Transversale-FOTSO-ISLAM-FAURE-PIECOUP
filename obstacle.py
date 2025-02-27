@@ -1,7 +1,7 @@
 import pygame
 
 
-class Obstacle:
+class Obstacle(pygame.sprite.Sprite):
     def __init__(self,level,x,y):
         super().__init__()
         self.level = level

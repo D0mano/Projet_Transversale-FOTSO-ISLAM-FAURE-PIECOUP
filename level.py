@@ -10,7 +10,6 @@ class Level:
         self.image = pygame.image.load(self.background[level-1]).convert_alpha()
         self.lv_number =  level
 
-
         if level == 1:
             self.pos_y = 520
             self.gravity = 10
@@ -19,3 +18,5 @@ class Level:
         elif level == 2:
             self.pos_y = 590
             self.gravity = 3
+        self.all_obstacle = pygame.sprite.Group()
+        self.all_obstacle.add(self.obstacle)
