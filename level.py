@@ -12,11 +12,12 @@ class Level:
 
         if level == 1:
             self.pos_y = 520
-            self.gravity = 10
+            self.gravity = 50
             self.obstacle = Obstacle(self,640,360)
 
         elif level == 2:
             self.pos_y = 590
-            self.gravity = 3
+            self.gravity = 20
+            self.obstacle = Obstacle(self,640,360)
         self.all_obstacle = pygame.sprite.Group()
         self.all_obstacle.add(self.obstacle)

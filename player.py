@@ -54,7 +54,8 @@ class Player(pygame.sprite.Sprite):
 
 
     def damage(self, amount):
-        self.health -= amount
+        if self.health > amount:
+            self.health -= amount
 
 
     def fire(self):
@@ -73,12 +74,12 @@ class Player(pygame.sprite.Sprite):
             self.rect = self.canon.get_rect(center=self.rect.center)
 
     def power_up(self):
-        if self.power < 100:
-            self.power += 5
+        if self.power < 30:
+            self.power += 2
 
     def power_down(self):
         if self.power > 0:
-            self.power -= 5
+            self.power -= 2
 
 
     def show_info(self):

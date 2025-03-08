@@ -5,7 +5,8 @@ class Obstacle(pygame.sprite.Sprite):
     def __init__(self,level,x,y):
         super().__init__()
         self.level = level
-        self.type_obstacle = ["assets_game_PT/blue_wall.png"]
+        self.type_obstacle = ["assets_game_PT/blue_wall.png",
+                              "assets_game_PT/blue_wall.png"]
         self.image = pygame.image.load(self.type_obstacle[self.level.lv_number-1]).convert_alpha()
         self.image = pygame.transform.scale(self.image, (10, 100))
         self.rect = self.image.get_rect()

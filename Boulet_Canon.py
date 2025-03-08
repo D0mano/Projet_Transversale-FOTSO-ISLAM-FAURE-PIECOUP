@@ -33,8 +33,8 @@ class Projectile(pygame.sprite.Sprite):
         self.vel_y = -self.power * math.sin(angle_rad)
         self.time = 0
 
-    def move(self):
-        self.time += 0.1
+    def move(self,dt):
+        self.time += dt
         self.rect.x += int(self.vel_x) * self.user.direction
         self.rect.y += int(0.5 * self.gravity* self.time**2 +self.vel_y)
 
