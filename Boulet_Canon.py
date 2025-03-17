@@ -14,7 +14,10 @@ class Projectile(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image,(20,20))
         self.rect = self.image.get_rect()
 
-        canon_length = 5
+        if player.direction == 1:
+            canon_length = 13
+        else:
+            canon_length = 5
 
         angle_rad = math.radians(player.angle)
         offset_x = canon_length * math.cos(angle_rad)
