@@ -9,6 +9,8 @@ class Game:
         self.level = level
         for player in self.player:
             self.all_players.add(player)
+        self.is_paused = False
+        self.running = True
 
         self.current_player = 0 #Represent the index of the player currently playing
 
@@ -47,23 +49,147 @@ class Game:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_f:
                     self.is_playing = False
+                if event.key == pygame.K_ESCAPE:
+                    self.is_paused = True
+                    self.pause_menu(ecran)
 
                 if event.key == pygame.K_SPACE:
                     self.player[self.current_player].fire()
                     self.switch_turn()
 
+                if self.current_player == 0:
+                    if event.key == pygame.K_RIGHT:
+                        self.player[self.current_player].power_up()
 
-                elif event.key == pygame.K_RIGHT:
-                    self.player[self.current_player].power_up()
+                    elif event.key == pygame.K_LEFT:
+                        self.player[self.current_player].power_down()
+                else:
+                    if event.key == pygame.K_LEFT:
+                        self.player[self.current_player].power_up()
 
-                elif event.key == pygame.K_LEFT:
-                    self.player[self.current_player].power_down()
+                    elif event.key == pygame.K_RIGHT:
+                        self.player[self.current_player].power_down()
 
-                elif event.key == pygame.K_UP:
+                if event.key == pygame.K_UP:
                     self.player[self.current_player].aim_up()
 
                 elif event.key == pygame.K_DOWN:
                     self.player[self.current_player].aim_down()
+
+    def menu(self,ecran):
+        # We load the different asset for the menu
+
+        background = pygame.image.load("assets_game_PT/Background_menu.png").convert_alpha()
+        banner = pygame.image.load("assets_game_PT/CANON_MASTER_Logo-removebg-preview.png").convert_alpha()
+
+        banner_rect = banner.get_rect()
+        banner_rect.x = (ecran.get_width() / 2) - 250
+        banner_rect.y = ecran.get_height() - 800
+
+        play_button_white = pygame.image.load("assets_game_PT/play_button_white.png").convert_alpha()
+        play_button_green = pygame.image.load("assets_game_PT/play_button_green.png").convert_alpha()
+        play_button_rect = play_button_green.get_rect()
+        play_button_rect.x = ecran.get_width() / 2 - 150
+        play_button_rect.y = ecran.get_height() / 3
+
+        quit_button_white = pygame.image.load("assets_game_PT/quit_button_white.png").convert_alpha()
+        quit_button_red = pygame.image.load("assets_game_PT/quit_button_red.png").convert_alpha()
+        quit_button_rect = quit_button_red.get_rect()
+        quit_button_rect.x = ecran.get_width() / 2 - 150
+        quit_button_rect.y = ecran.get_height() / 3 + 150
+
+        play_button = play_button_white
+        quit_button = quit_button_white
+        run = True
+
+        while self.running and not self.is_playing:
+            ecran.blit(background, (0, 0))
+            ecran.blit(banner, banner_rect)
+            ecran.blit(play_button, play_button_rect)
+            ecran.blit(quit_button, quit_button_rect)
+
+            # Handle input events for quitting and menu interaction
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+                elif event.type == pygame.MOUSEMOTION:
+                    if play_button_rect.collidepoint(event.pos):
+                        play_button = play_button_green
+                    else:
+                        play_button = play_button_white
+                    if quit_button_rect.collidepoint(event.pos):
+                        quit_button = quit_button_red
+                    else:
+                        quit_button = quit_button_white
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    if play_button_rect.collidepoint(event.pos):
+                        self.is_playing = True  # Start the game when play is clicked
+                    elif quit_button_rect.collidepoint(event.pos):
+                        self.running = False  # Quit the game when quit is clicked
+            pygame.display.flip()  # Update the display to the screen
+
+    def pause_menu(self, ecran):
+        # Dessiner un fond semi-transparent
+        pause_overlay = pygame.Surface(ecran.get_size(), pygame.SRCALPHA)
+        pause_overlay.fill((0, 0, 0, 180))  # Couleur noire avec transparence
+        ecran.blit(pause_overlay, (0, 0))
+
+        # Charger les images des boutons
+        resume_button = pygame.image.load("assets_game_PT/play_button_green.png").convert_alpha()
+        options_button = pygame.image.load("assets_game_PT/play_button_white.png").convert_alpha()
+        quit_button = pygame.image.load("assets_game_PT/quit_button_white.png").convert_alpha()
+
+        # Positionner les boutons
+        resume_rect = resume_button.get_rect(center=(ecran.get_width() // 2, 300))
+        options_rect = options_button.get_rect(center=(ecran.get_width() // 2, 400))
+        quit_rect = quit_button.get_rect(center=(ecran.get_width() // 2, 500))
+
+        # Afficher les boutons
+        ecran.blit(resume_button, resume_rect)
+        ecran.blit(options_button, options_rect)
+        ecran.blit(quit_button, quit_rect)
+
+        pygame.display.flip()
+
+        # Boucle du menu pause
+        while self.is_paused:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    if resume_rect.collidepoint(event.pos):
+                        self.is_paused = False  # Reprendre le jeu
+                    elif quit_rect.collidepoint(event.pos):
+                        self.is_playing = False  # Retour au menu principal
+                        self.is_paused = False
+                    elif options_rect.collidepoint(event.pos):
+                        self.options_menu(ecran)  # Afficher le menu des options
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.is_paused = False  # Reprendre le jeu
+
+    def options_menu(self, ecran):
+        # Exemple simple d'un menu d'options
+        options_overlay = pygame.Surface(ecran.get_size(), pygame.SRCALPHA)
+        options_overlay.fill((50, 50, 50, 200))  # Fond semi-transparent
+        ecran.blit(options_overlay, (0, 0))
+
+        font = pygame.font.Font(None, 50)
+        text = font.render("Options Menu - Press ESC to go back", True, (255, 255, 255))
+        ecran.blit(text, (100, 200))
+        pygame.display.flip()
+
+        # Attente d'une action pour quitter les options
+        waiting = True
+        while waiting:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        waiting = False
 
     def switch_turn(self):
         self.current_player = 1 - self.current_player
