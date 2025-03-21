@@ -53,7 +53,7 @@ class Game:
                     self.is_playing = False
                 if event.key == pygame.K_ESCAPE:
                     self.is_paused = True
-                    self.pause_menu(self.screen)
+                    self.pause_menu()
 
                 if event.key == pygame.K_SPACE:
                     self.player[self.current_player].fire()
@@ -103,7 +103,6 @@ class Game:
 
         play_button = play_button_white
         quit_button = quit_button_white
-        run = True
 
         while self.running and not self.is_playing:
             self.screen.blit(background, (0, 0))
@@ -135,8 +134,8 @@ class Game:
         # Dessiner un fond semi-transparent
         pause_overlay = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA)
         pause_overlay.fill((0, 0, 0, 180))  # Couleur noire avec transparence
-        ecran.blit(pause_overlay, (0, 0))
-        backgrounds_copy = ecran.copy()
+        self.screen.blit(pause_overlay, (0, 0))
+        backgrounds_copy = self.screen.copy()
         # Charger les images des boutons
         resume_button_white = pygame.image.load("assets_game_PT/button/RESUME_button_white-removebg-preview.png").convert_alpha()
         options_button_white = pygame.image.load("assets_game_PT/button/OPTION_button_white-removebg-preview.png").convert_alpha()
@@ -150,9 +149,9 @@ class Game:
             "assets_game_PT/button/QUIT_button_gray-removebg-preview.png").convert_alpha()
 
         # Positionner les boutons
-        resume_rect = resume_button_white.get_rect(center=(ecran.get_width() // 2,ecran.get_width()/6.4))
-        options_rect = options_button_white.get_rect(center=(ecran.get_width() // 2, ecran.get_width()/ 3.6))
-        quit_rect = quit_button_white.get_rect(center=(ecran.get_width() // 2, ecran.get_width()/2.56))
+        resume_rect = resume_button_white.get_rect(center=(self.screen.get_width() // 2,self.screen.get_width()/6.4))
+        options_rect = options_button_white.get_rect(center=(self.screen.get_width() // 2, self.screen.get_width()/ 3.6))
+        quit_rect = quit_button_white.get_rect(center=(self.screen.get_width() // 2, self.screen.get_width()/2.56))
 
 
         resume_button = resume_button_white
@@ -200,7 +199,7 @@ class Game:
                         self.is_paused = False
                     elif options_rect.collidepoint(event.pos):
                         self.waiting = True
-                        self.options_menu(self.screen)  # Afficher le menu des options
+                        self.options_menu()  # Afficher le menu des options
 
 
                 elif event.type == pygame.KEYDOWN:

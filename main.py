@@ -9,10 +9,8 @@ clock = pygame.time.Clock()
 
 run = True
 
-ecran = pygame.display.set_mode((800,600),pygame.RESIZABLE)
-
 # Initialize level and game objects
-level = Level(1)
+
 ecran = pygame.display.set_mode((0,0),pygame.RESIZABLE)
 level = Level(1,ecran)
 pygame.display.set_caption("CanonMaster")
