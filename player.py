@@ -40,11 +40,11 @@ class Player(pygame.sprite.Sprite):
 
         # we define the position and dimension of the health bar
         if self.direction == 1:
-            bar_pos = [30,50,self.health*4,20]
-            bar_back_pos = [30,50,self.max_health*4,20]
+            bar_pos = [self.game.screen.get_width()/20,50,self.health*4,20]
+            bar_back_pos = [self.game.screen.get_width()/20,50,self.max_health*4,20]
         else:
-            bar_pos = [850,50,self.health*4,20]
-            bar_back_pos = [850,50,self.max_health*4,20]
+            bar_pos = [self.game.screen.get_width()/1.51,50,self.health*4,20]
+            bar_back_pos = [self.game.screen.get_width()/1.51,50,self.max_health*4,20]
         # We define the position of the back health bar
 
         # we draw the health bar
