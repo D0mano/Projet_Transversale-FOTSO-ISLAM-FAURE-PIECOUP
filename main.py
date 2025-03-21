@@ -9,10 +9,10 @@ clock = pygame.time.Clock() # Clock to control FPS and delta time
 
 run = True
 
-ecran = pygame.display.set_mode((0,0),pygame.RESIZABLE)
+ecran = pygame.display.set_mode((800,600),pygame.RESIZABLE)
 
 # Initialize level and game objects
-level = Level(1,ecran)
+level = Level(1)
 pygame.display.set_caption("CanonMaster")
 
 
@@ -22,6 +22,7 @@ game = Game(level)
 while run: # Main loop for the game
     #Calculate the delta time in seconds
     dt = clock.tick(60)/1000.0
+    print(dt)
 
     # We verify if the game is playing
     if game.is_playing:

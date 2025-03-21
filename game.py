@@ -11,6 +11,7 @@ class Game:
             self.all_players.add(player)
         self.is_paused = False
         self.running = True
+        self.waiting = False
 
         self.current_player = 0 #Represent the index of the player currently playing
 
@@ -86,21 +87,20 @@ class Game:
         banner_rect.x = (ecran.get_width() / 2) - 250
         banner_rect.y = ecran.get_height() - 800
 
-        play_button_white = pygame.image.load("assets_game_PT/play_button_white.png").convert_alpha()
-        play_button_green = pygame.image.load("assets_game_PT/play_button_green.png").convert_alpha()
+        play_button_white = pygame.image.load("assets_game_PT/button/play_button_white.png").convert_alpha()
+        play_button_green = pygame.image.load("assets_game_PT/button/play_button_green.png").convert_alpha()
         play_button_rect = play_button_green.get_rect()
         play_button_rect.x = ecran.get_width() / 2 - 150
         play_button_rect.y = ecran.get_height() / 3
 
-        quit_button_white = pygame.image.load("assets_game_PT/quit_button_white.png").convert_alpha()
-        quit_button_red = pygame.image.load("assets_game_PT/quit_button_red.png").convert_alpha()
+        quit_button_white = pygame.image.load("assets_game_PT/button/quit_button_white.png").convert_alpha()
+        quit_button_red = pygame.image.load("assets_game_PT/button/quit_button_red.png").convert_alpha()
         quit_button_rect = quit_button_red.get_rect()
         quit_button_rect.x = ecran.get_width() / 2 - 150
         quit_button_rect.y = ecran.get_height() / 3 + 150
 
         play_button = play_button_white
         quit_button = quit_button_white
-        run = True
 
         while self.running and not self.is_playing:
             ecran.blit(background, (0, 0))
@@ -133,30 +133,62 @@ class Game:
         pause_overlay = pygame.Surface(ecran.get_size(), pygame.SRCALPHA)
         pause_overlay.fill((0, 0, 0, 180))  # Couleur noire avec transparence
         ecran.blit(pause_overlay, (0, 0))
-
+        backgrounds_copy = ecran.copy()
         # Charger les images des boutons
-        resume_button = pygame.image.load("assets_game_PT/play_button_green.png").convert_alpha()
-        options_button = pygame.image.load("assets_game_PT/play_button_white.png").convert_alpha()
-        quit_button = pygame.image.load("assets_game_PT/quit_button_white.png").convert_alpha()
+        resume_button_white = pygame.image.load("assets_game_PT/button/RESUME_button_white-removebg-preview.png").convert_alpha()
+        options_button_white = pygame.image.load("assets_game_PT/button/OPTION_button_white-removebg-preview.png").convert_alpha()
+        quit_button_white = pygame.image.load("assets_game_PT/button/QUIT_button_white2-removebg-preview.png").convert_alpha()
+
+        resume_button_gray = pygame.image.load(
+            "assets_game_PT/button/RESUME_button_gray-removebg-preview.png").convert_alpha()
+        options_button_gray = pygame.image.load(
+            "assets_game_PT/button/OPTION_button_gray-removebg-preview.png").convert_alpha()
+        quit_button_gray = pygame.image.load(
+            "assets_game_PT/button/QUIT_button_gray-removebg-preview.png").convert_alpha()
 
         # Positionner les boutons
-        resume_rect = resume_button.get_rect(center=(ecran.get_width() // 2, 300))
-        options_rect = options_button.get_rect(center=(ecran.get_width() // 2, 400))
-        quit_rect = quit_button.get_rect(center=(ecran.get_width() // 2, 500))
+        resume_rect = resume_button_white.get_rect(center=(ecran.get_width() // 2,ecran.get_width()/6.4))
+        options_rect = options_button_white.get_rect(center=(ecran.get_width() // 2, ecran.get_width()/ 3.6))
+        quit_rect = quit_button_white.get_rect(center=(ecran.get_width() // 2, ecran.get_width()/2.56))
 
+
+        resume_button = resume_button_white
+        options_button = options_button_white
+        quit_button = quit_button_white
         # Afficher les boutons
-        ecran.blit(resume_button, resume_rect)
-        ecran.blit(options_button, options_rect)
-        ecran.blit(quit_button, quit_rect)
 
-        pygame.display.flip()
+
 
         # Boucle du menu pause
         while self.is_paused:
+            ecran.blit(backgrounds_copy,(0,0))
+            ecran.blit(resume_button, resume_rect)
+            ecran.blit(options_button, options_rect)
+            ecran.blit(quit_button, quit_rect)
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     exit()
+                elif event.type == pygame.MOUSEMOTION:
+                    if resume_rect.collidepoint(event.pos):
+                        resume_button = resume_button_gray
+
+                    else:
+                        resume_button = resume_button_white
+
+                    if options_rect.collidepoint(event.pos):
+                        options_button = options_button_gray
+
+                    else:
+                        options_button = options_button_white
+
+                    if quit_rect.collidepoint(event.pos):
+                        quit_button = quit_button_gray
+
+                    else:
+                        quit_button = quit_button_white
+
                 elif event.type == pygame.MOUSEBUTTONUP:
                     if resume_rect.collidepoint(event.pos):
                         self.is_paused = False  # Reprendre le jeu
@@ -164,13 +196,18 @@ class Game:
                         self.is_playing = False  # Retour au menu principal
                         self.is_paused = False
                     elif options_rect.collidepoint(event.pos):
+                        self.waiting = True
                         self.options_menu(ecran)  # Afficher le menu des options
+
+
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.is_paused = False  # Reprendre le jeu
+            pygame.display.flip()
 
     def options_menu(self, ecran):
-        # Exemple simple d'un menu d'options
+        backgrounds_copy = ecran.copy()
+
         options_overlay = pygame.Surface(ecran.get_size(), pygame.SRCALPHA)
         options_overlay.fill((50, 50, 50, 200))  # Fond semi-transparent
         ecran.blit(options_overlay, (0, 0))
@@ -181,15 +218,22 @@ class Game:
         pygame.display.flip()
 
         # Attente d'une action pour quitter les options
-        waiting = True
-        while waiting:
+
+        while self.waiting:
+
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    exit()
+
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                        waiting = False
+                        self.waiting = False
+        ecran.blit(backgrounds_copy,(0,0))
+        pygame.display.flip()
+
+
+
 
     def switch_turn(self):
         self.current_player = 1 - self.current_player
