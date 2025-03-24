@@ -81,9 +81,9 @@ class Game:
     def menu(self):
         # We load the different asset for the menu
 
-        background = pygame.image.load("assets_game_PT/Background_menu.png").convert_alpha()
+        background = pygame.image.load("assets_game_PT/background/Background_menu.png").convert_alpha()
         background = pygame.transform.scale(background, (self.screen.get_width(),self.screen.get_height()))
-        banner = pygame.image.load("assets_game_PT/CANON_MASTER_Logo-removebg-preview.png").convert_alpha()
+        banner = pygame.image.load("assets_game_PT/logo/CANON_MASTER_Logo-removebg-preview.png").convert_alpha()
 
         banner_rect = banner.get_rect()
         banner_rect.x = (self.screen.get_width() / 2) - 250

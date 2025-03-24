@@ -16,9 +16,9 @@ class Player(pygame.sprite.Sprite):
         self.angle = 0
         self.power = 20
         self.all_projectile = pygame.sprite.Group()
-        self.pied_canon = pygame.image.load("assets_game_PT/_pied_Canon_1-removebg-preview.png").convert_alpha()
+        self.pied_canon = pygame.image.load("assets_game_PT/canon/_pied_Canon_1-removebg-preview.png").convert_alpha()
         self.pied_canon = pygame.transform.scale(self.pied_canon,(60,60))
-        self.original_canon = pygame.image.load("assets_game_PT/_Canon_2-removebg-preview.png").convert_alpha()
+        self.original_canon = pygame.image.load("assets_game_PT/canon/_Canon_2-removebg-preview.png").convert_alpha()
         self.original_canon = pygame.transform.scale(self.original_canon, (60, 60))
         if direction == -1:
             self.original_canon = pygame.transform.flip(self.original_canon,True,False)

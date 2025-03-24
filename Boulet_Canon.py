@@ -10,7 +10,7 @@ class Projectile(pygame.sprite.Sprite):
         self.level = level
         self.game = game
         self.user = player
-        self.image = pygame.image.load("assets_game_PT/boulet_de_canon-removebg-preview.png")
+        self.image = pygame.image.load("assets_game_PT/canon/boulet_de_canon-removebg-preview.png")
         self.image = pygame.transform.scale(self.image,(20,20))
         self.rect = self.image.get_rect()
 

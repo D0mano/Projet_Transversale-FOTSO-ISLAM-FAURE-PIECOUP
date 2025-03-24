@@ -4,13 +4,14 @@ pygame.init()
 
 class Level:
     def __init__(self,level,screen):
-        self.background = ["assets_game_PT/Background_1-fotor2.png",
-                           "assets_game_PT/Background_space.png"]
+        self.background = ["assets_game_PT/background/Background_1-fotor2.png",
+                           "assets_game_PT/background/Background_space.png"]
 
         self.image = pygame.image.load(self.background[level-1]).convert_alpha()
         self.screen = screen
         self.image = pygame.transform.scale(self.image, (self.screen.get_width(), self.screen.get_height()))
         self.lv_number =  level
+        self.sound = pygame.mixer.Sound("")
 
         if level == 1:
             self.pos_y = screen.get_height()/1.38
