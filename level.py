@@ -15,11 +15,11 @@ class Level:
         if level == 1:
             self.pos_y = screen.get_height()/1.38
             self.gravity = 50
-            self.obstacle = Obstacle(self,screen.get_width()/2,360)
+            self.obstacle = Obstacle(self,screen.get_width()/2-20,360)
 
         elif level == 2:
             self.pos_y = screen.get_height()/1.22
             self.gravity = 20
-            self.obstacle = Obstacle(self,screen.get_width()/2,360)
+            self.obstacle = Obstacle(self,screen.get_width()/2-40,360)
         self.all_obstacle = pygame.sprite.Group()
         self.all_obstacle.add(self.obstacle)
