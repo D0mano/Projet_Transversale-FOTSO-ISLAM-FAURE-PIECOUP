@@ -1,5 +1,8 @@
 import pygame
+from pygame import KEYDOWN, K_ESCAPE, VIDEORESIZE, MOUSEBUTTONUP
+
 from player import Player
+from level import Level
 
 class Game:
     def __init__(self,level,ecran):
@@ -13,14 +16,13 @@ class Game:
         self.is_paused = False
         self.running = True
         self.waiting = False
+        self.in_menu = True
 
         self.current_player = 0 #Represent the index of the player currently playing
 
     def start(self,dt):
-        # Load the background and the obstacle of the Level
-        self.screen.blit(self.level.image, (0, 0))
-        self.screen.blit(self.level.obstacle.image, (self.level.obstacle.rect.x, self.level.obstacle.rect.y))
-        self.level.obstacle.move_obstacle()
+        self.in_menu = False
+        self.level.load_level()
 
         # Load the player model
         self.screen.blit(self.player[0].pied_canon, (self.player[0].rect_pied.x, self.player[0].rect_pied.y))
@@ -48,9 +50,18 @@ class Game:
 
         # Loop for the keys
         for event in pygame.event.get():
+            if event.type == VIDEORESIZE:
+                self.level.load_level()
+                self.level.image = pygame.transform.scale(self.level.true_image, (self.screen.get_width(), self.screen.get_height()))
+                for players in self.player:
+                    players.cal_pos()
+                self.level.obstacle.cal_pos_obs()
             if event.type == pygame.KEYDOWN:
+                if event.key == pygame.QUIT:
+                    self.running = False
                 if event.key == pygame.K_f:
-                    self.is_playing = False
+                    self.in_menu = True
+                    self.game_over()
                 if event.key == pygame.K_ESCAPE:
                     self.is_paused = True
                     self.pause_menu()
@@ -78,6 +89,17 @@ class Game:
                 elif event.key == pygame.K_DOWN:
                     self.player[self.current_player].aim_down()
 
+
+    def game_over(self):
+        for player in self.player:
+            player.health = player.max_health
+            player.reinitialize_canon()
+            player.cal_pos()
+        self.current_player = 0
+        self.is_playing = False
+        self.in_menu = True
+
+
     def menu(self):
         # We load the different asset for the menu
 
@@ -103,7 +125,6 @@ class Game:
 
         play_button = play_button_white
         quit_button = quit_button_white
-
         while self.running and not self.is_playing:
             self.screen.blit(background, (0, 0))
             self.screen.blit(banner, banner_rect)
@@ -125,7 +146,9 @@ class Game:
                         quit_button = quit_button_white
                 elif event.type == pygame.MOUSEBUTTONUP:
                     if play_button_rect.collidepoint(event.pos):
-                        self.is_playing = True  # Start the game when play is clicked
+
+                        self.level_menu()  # Let you select the level you wants
+                        self.in_menu = False
                     elif quit_button_rect.collidepoint(event.pos):
                         self.running = False  # Quit the game when quit is clicked
             pygame.display.flip()  # Update the display to the screen
@@ -195,7 +218,8 @@ class Game:
                     if resume_rect.collidepoint(event.pos):
                         self.is_paused = False  # Reprendre le jeu
                     elif quit_rect.collidepoint(event.pos):
-                        self.is_playing = False  # Retour au menu principal
+                        self.game_over() # Retour au menu principal
+                        self.in_menu = True
                         self.is_paused = False
                     elif options_rect.collidepoint(event.pos):
                         self.waiting = True
@@ -209,32 +233,59 @@ class Game:
 
     def options_menu(self):
         backgrounds_copy = self.screen.copy()
-
         options_overlay = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA)
         options_overlay.fill((50, 50, 50, 200))  # Fond semi-transparent
         self.screen.blit(options_overlay, (0, 0))
+        options_overlay_copy = self.screen.copy()
 
         font = pygame.font.Font(None, 50)
         text = font.render("Options Menu - Press ESC to go back", True, (255, 255, 255))
-        self.screen.blit(text, (100, 200))
+        text_rect = text.get_rect(center = (self.screen.get_width()/ 3,self.screen.get_height() / 3.6) )
+        volume = pygame.image.load("assets_game_PT/button/volume.png").convert_alpha()
+        volume = pygame.transform.scale(volume,(100,100))
+        mute = pygame.image.load("assets_game_PT/button/mute.png").convert_alpha()
+        mute = pygame.transform.scale(mute,(100,100))
+        level_select = pygame.image.load("assets_game_PT/button/Selecteur_level.png")
+        level_select = pygame.transform.scale(level_select,(100,100))
+
+        volume_rect = volume.get_rect(center = (self.screen.get_width() / 8.5 ,self.screen.get_height() / 2.05))
+        mute_rect = volume_rect
+        level_select_rect = level_select.get_rect(center = (self.screen.get_width()/8.5,self.screen.get_height() / 1.2))
+        volume_button = volume
         pygame.display.flip()
 
-        # Attente d'une action pour quitter les options
+        # Waiting for an input to close the options
 
         while self.waiting:
-
+            self.screen.blit(options_overlay_copy,(0,0))
+            self.screen.blit(text, text_rect)
+            self.screen.blit(volume_button, volume_rect)
+            self.screen.blit(level_select, level_select_rect)
+            pygame.display.flip()
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    if volume_button == volume and volume_rect.collidepoint(event.pos):
+                        volume_button = mute
+                    else:
+                        volume_button = volume
+                    if level_select_rect.collidepoint(event.pos):
+                        self.waiting = False
+                        self.is_paused = False
+                        self.is_playing = False
+                        self.level_menu()
+
+
+
 
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.waiting = False
-        self.screen.blit(backgrounds_copy,(0,0))
-        pygame.display.flip()
-
-
+        if self.is_paused:
+            self.screen.blit(backgrounds_copy,(0,0))
+            pygame.display.flip()
 
 
     def switch_turn(self):
@@ -242,3 +293,59 @@ class Game:
 
     def check_collision(self,sprite,group):
        return pygame.sprite.spritecollide(sprite,group,False)
+
+    def change_level(self,new_level):
+        self.level = new_level
+        self.player = [Player(self, self.level, self.screen.get_width() / 64, self.level.pos_y, 1),
+                       Player(self, self.level, self.screen.get_width() / 1.067, self.level.pos_y, -1)]
+        self.all_players = pygame.sprite.Group()
+        for player in self.player:
+            self.all_players.add(player)
+            self.current_player = 0
+
+
+    def level_menu(self):
+        self.in_menu = False
+        background = pygame.image.load("assets_game_PT/background/Background_menu.png").convert_alpha()
+        background = pygame.transform.scale(background, (self.screen.get_width(),self.screen.get_height()))
+
+        titre = pygame.image.load("assets_game_PT/logo/MASTER_horozontal (2).png").convert_alpha()
+        titre_rect = titre.get_rect(center = (self.screen.get_width()/2,self.screen.get_height()/6))
+
+        level_overlay_rect = (self.screen.get_width() /3,self.screen.get_height()/4.5,self.screen.get_width()/3.1,self.screen.get_height()/1.44)
+
+        levels = [Level(self.screen,1),
+                  Level(self.screen,2),]
+
+        font = pygame.font.Font(None, 50)
+        buttons = []
+        for i,level in enumerate(levels):
+            text = font.render(f"Level {i+1}", True, (255, 255, 255))
+            rect = text.get_rect(center = (self.screen.get_width()/2,200 + i*100))
+            buttons.append((text,rect,level))
+
+
+        self.screen.blit(background,(0,0))
+        pygame.draw.rect(self.screen, (50,30,30), level_overlay_rect, border_radius=20)
+        self.screen.blit(titre,titre_rect)
+        for text,rect,_ in buttons:
+            self.screen.blit(text, rect)
+            pygame.display.flip()
+
+        pygame.display.flip()
+        run = True
+        while run:
+            for event in pygame.event.get():
+                if event.type == KEYDOWN:
+                    if event.key == K_ESCAPE:
+                        run = False
+                        self.in_menu = True
+                if event.type == MOUSEBUTTONUP:
+                    for _,rect,level in buttons:
+                        if rect.collidepoint(event.pos):
+                            self.change_level(level)
+                            run = False
+                            self.is_playing = True
+
+
+

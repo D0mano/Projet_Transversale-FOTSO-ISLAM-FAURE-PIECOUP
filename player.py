@@ -1,4 +1,5 @@
 import pygame
+import time
 from Boulet_Canon import Projectile
 
 pygame.init()
@@ -31,6 +32,7 @@ class Player(pygame.sprite.Sprite):
         self.rect_pied.x = x
         self.rect_pied.y = y
         self.direction = direction
+        self.alive = True
 
     def update_health_bar(self,surface):
         # We define a color for the health bar
@@ -56,17 +58,34 @@ class Player(pygame.sprite.Sprite):
     def damage(self, amount):
         if self.health > amount:
             self.health -= amount
+        else:
+            self.alive = False
+            self.game.game_over()
+    def cal_pos(self):
+        if self.direction == 1:
+            self.rect.x = self.game.screen.get_width() / 64
+            self.rect_pied.x = self.rect.x
+        else:
+            self.rect.x = self.game.screen.get_width() / 1.067
+            self.rect_pied.x = self.rect.x
+        self.rect.y = self.game.screen.get_height()/1.38
+        self.rect_pied.y = self.rect.y
 
+    def reinitialize_canon(self):
+        self.angle = 0
+        self.power = 20
+        self.canon = pygame.transform.rotate(self.original_canon, self.angle * self.direction)
+        self.rect = self.canon.get_rect(center=self.rect.center)
 
     def fire(self):
         self.all_projectile.add(Projectile(self,self.level,self.game))
+        self.reinitialize_canon()
 
     def aim_up(self):
         if self.angle < 90:
             self.angle += 5
             self.canon = pygame.transform.rotate(self.original_canon, self.angle * self.direction)
             self.rect = self.canon.get_rect(center=self.rect.center)
-
     def aim_down(self):
         if self.angle > 0:
             self.angle -= 5
