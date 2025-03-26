@@ -1,5 +1,5 @@
 import pygame
-from pygame import KEYDOWN, K_ESCAPE, VIDEORESIZE, MOUSEBUTTONUP
+
 
 from player import Player
 from level import Level
@@ -50,7 +50,7 @@ class Game:
 
         # Loop for the keys
         for event in pygame.event.get():
-            if event.type == VIDEORESIZE:
+            if event.type == pygame.VIDEORESIZE:
                 self.level.load_level()
                 self.level.image = pygame.transform.scale(self.level.true_image, (self.screen.get_width(), self.screen.get_height()))
                 for players in self.player:
@@ -336,11 +336,11 @@ class Game:
         run = True
         while run:
             for event in pygame.event.get():
-                if event.type == KEYDOWN:
-                    if event.key == K_ESCAPE:
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
                         run = False
                         self.in_menu = True
-                if event.type == MOUSEBUTTONUP:
+                if event.type == pygame.MOUSEBUTTONUP:
                     for _,rect,level in buttons:
                         if rect.collidepoint(event.pos):
                             self.change_level(level)
