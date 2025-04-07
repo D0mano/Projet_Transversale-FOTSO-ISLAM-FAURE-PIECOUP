@@ -11,7 +11,6 @@ class Level:
 
         self.true_image = pygame.image.load(self.background[self.lv_number-1]).convert_alpha()
         self.image = pygame.transform.scale(self.true_image, (self.screen.get_width(), self.screen.get_height()))
-        #self.sound = pygame.mixer.Sound("")
 
 
         if self.lv_number == 1:
@@ -31,7 +30,3 @@ class Level:
         self.screen.blit(self.image, (0, 0))
         self.screen.blit(self.obstacle.image, (self.obstacle.rect.x, self.obstacle.rect.y))
         self.obstacle.move_obstacle()
-
-
-
-

@@ -346,6 +346,3 @@ class Game:
                             self.change_level(level)
                             run = False
                             self.is_playing = True
-
-
-

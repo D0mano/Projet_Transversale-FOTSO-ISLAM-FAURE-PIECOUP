@@ -35,4 +35,3 @@ while run: # Main loop for the game
     pygame.display.flip() # Update the display to the screen
 
 pygame.quit()
-

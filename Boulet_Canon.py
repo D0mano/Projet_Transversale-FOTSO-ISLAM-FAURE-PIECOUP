@@ -13,6 +13,8 @@ class Projectile(pygame.sprite.Sprite):
         self.image = pygame.image.load("assets_game_PT/canon/boulet_de_canon-removebg-preview.png")
         self.image = pygame.transform.scale(self.image,(20,20))
         self.rect = self.image.get_rect()
+        self.canon_sound = pygame.mixer.Sound("assets_game_PT/sound/sf_canon_01.mp3")
+        self.explosion_sound = pygame.mixer.Sound("assets_game_PT/sound/medium-explosion-40472.mp3")
 
         if player.direction == 1:
             canon_length = 13
@@ -37,16 +39,22 @@ class Projectile(pygame.sprite.Sprite):
         self.time = 0
 
     def move(self,dt):
+        if self.time == 0:
+            self.canon_sound.play()
+        
         self.time += dt
         self.rect.x += int(self.vel_x) * self.user.direction
         self.rect.y += int(0.5 * self.gravity* self.time**2 +self.vel_y)
 
         if self.rect.y >self.level.pos_y + 30 :
+            self.explosion_sound.play()
             self.kill()
 
         for player in self.game.check_collision(self,self.game.all_players):
             if player != self.user:
+                self.explosion_sound.play()
                 self.kill()
                 player.damage(self.user.attack)
         for obstacle in self.game.check_collision(self,self.level.all_obstacle):
+            self.explosion_sound.play()
             self.kill()
