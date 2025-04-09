@@ -1,6 +1,4 @@
-
 import pygame
-import time
 from game import Game
 from level import Level
 
@@ -23,14 +21,11 @@ while run: # Main loop for the game
     # We verify if the game is playing
     if game.is_playing:
         game.start(dt)
+
     elif game.in_menu:
         game.menu()
         run = game.running
 
-    # Handle input events for quitting
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
 
     pygame.display.flip() # Update the display to the screen
 

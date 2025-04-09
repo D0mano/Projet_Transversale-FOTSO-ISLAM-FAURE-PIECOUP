@@ -6,7 +6,8 @@ class Obstacle(pygame.sprite.Sprite):
         super().__init__()
         self.level = level
         self.type_obstacle = ["assets_game_PT/obstacles/muraille.png",
-                              "assets_game_PT/obstacles/meteorite.png"]
+                              "assets_game_PT/obstacles/meteorite.png",
+                              "assets_game_PT/obstacles/muraille.png"]
         self.image = pygame.image.load(self.type_obstacle[self.level.lv_number-1]).convert_alpha()
         if level.lv_number == 1:
             self.image = pygame.transform.scale(self.image, (40, 120))
@@ -26,6 +27,9 @@ class Obstacle(pygame.sprite.Sprite):
                 self.direction *= -1
         elif self.level.lv_number == 2:
             if self.rect.y < self.level.screen.get_height()/102 or self.rect.y >= self.level.pos_y - self.level.screen.get_height()/4.8:
+                self.direction *= -1
+        elif self.level.lv_number == 3:
+            if self.rect.y < self.level.screen.get_height()/102 or self.rect.y >= self.level.pos_y - self.level.screen.get_height()/14:
                 self.direction *= -1
 
     def cal_pos_obs(self):

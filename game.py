@@ -1,6 +1,5 @@
+import sys
 import pygame
-
-
 from player import Player
 from level import Level
 
@@ -19,11 +18,16 @@ class Game:
         self.in_menu = True
 
         self.current_player = 0 #Represent the index of the player currently playing
+        self.volume = 100
+        if self.volume == 0:
+            self.mute = True
+        else:
+            self.mute = False
 
     def start(self,dt):
         self.in_menu = False
-        self.level.load_level()
 
+        self.level.load_level()
         # Load the player model
         self.screen.blit(self.player[0].pied_canon, (self.player[0].rect_pied.x, self.player[0].rect_pied.y))
         self.screen.blit(self.player[1].pied_canon, (self.player[1].rect_pied.x, self.player[1].rect_pied.y))
@@ -56,9 +60,10 @@ class Game:
                 for players in self.player:
                     players.cal_pos()
                 self.level.obstacle.cal_pos_obs()
-            if event.type == pygame.KEYDOWN:
+            if event.type == pygame.KEYUP:
                 if event.key == pygame.QUIT:
                     self.running = False
+                    sys.exit()
                 if event.key == pygame.K_f:
                     self.in_menu = True
                     self.game_over()
@@ -104,46 +109,71 @@ class Game:
         # We load the different asset for the menu
 
         background = pygame.image.load("assets_game_PT/background/Background_menu.png").convert_alpha()
-        background = pygame.transform.scale(background, (self.screen.get_width(),self.screen.get_height()))
-        banner = pygame.image.load("assets_game_PT/logo/CANON_MASTER_Logo-removebg-preview.png").convert_alpha()
+        background_resize = pygame.transform.scale(background, (self.screen.get_width(), self.screen.get_height()))
 
-        banner_rect = banner.get_rect()
-        banner_rect.x = (self.screen.get_width() / 2) - 250
-        banner_rect.y = -self.screen.get_height()/9
+        banner = pygame.image.load("assets_game_PT/logo/CANON_MASTER_Logo-removebg-preview.png").convert_alpha()
+        banner_resize = pygame.transform.scale(banner,(self.screen.get_width()/2.56,self.screen.get_height()/1.44))
+
+        banner_rect = banner_resize.get_rect(center = (self.screen.get_width()/2,self.screen.get_height()/4))
 
         play_button_white = pygame.image.load("assets_game_PT/button/play_button_white.png").convert_alpha()
+        play_button_white_resize = pygame.transform.scale(play_button_white,(self.screen.get_width()/4.26,self.screen.get_height()/3.6))
         play_button_green = pygame.image.load("assets_game_PT/button/play_button_green.png").convert_alpha()
-        play_button_rect = play_button_green.get_rect()
-        play_button_rect.x = self.screen.get_width() / 2 - 150
-        play_button_rect.y = self.screen.get_height() / 3
+        play_button_green_resize = pygame.transform.scale(play_button_green,(self.screen.get_width()/4.26,self.screen.get_height()/3.6))
+        play_button_rect = play_button_white_resize.get_rect(center = (self.screen.get_width()/2,self.screen.get_height()/2))
 
         quit_button_white = pygame.image.load("assets_game_PT/button/quit_button_white.png").convert_alpha()
+        quit_button_white_resize = pygame.transform.scale(quit_button_white,(self.screen.get_width()/4.26,self.screen.get_height()/3.6))
         quit_button_red = pygame.image.load("assets_game_PT/button/quit_button_red.png").convert_alpha()
-        quit_button_rect = quit_button_red.get_rect()
-        quit_button_rect.x = self.screen.get_width() / 2 - 150
-        quit_button_rect.y = self.screen.get_height() / 3 + 150
+        quit_button_red_resize = pygame.transform.scale(quit_button_red,(self.screen.get_width()/4.26,self.screen.get_height()/3.6))
+        quit_button_rect = quit_button_white_resize.get_rect(center = (self.screen.get_width()/2,self.screen.get_height()/1.3))
 
-        play_button = play_button_white
-        quit_button = quit_button_white
+
+        play_button = play_button_white_resize
+        quit_button = quit_button_white_resize
         while self.running and not self.is_playing:
-            self.screen.blit(background, (0, 0))
-            self.screen.blit(banner, banner_rect)
+            self.screen.blit(background_resize, (0, 0))
+            self.screen.blit(banner_resize, banner_rect)
             self.screen.blit(play_button, play_button_rect)
             self.screen.blit(quit_button, quit_button_rect)
 
             # Handle input events for quitting and menu interaction
             for event in pygame.event.get():
+                if event.type == pygame.VIDEORESIZE:
+                    background_resize = pygame.transform.scale(background,
+                                                               (self.screen.get_width(), self.screen.get_height()))
+                    banner_resize = pygame.transform.scale(banner, (
+                        self.screen.get_width() / 2.56, self.screen.get_height() / 1.44))
+                    banner_rect = banner_resize.get_rect(
+                        center=(self.screen.get_width() / 2, self.screen.get_height() / 4))
+
+                    quit_button_red_resize = pygame.transform.scale(quit_button_red, (
+                    self.screen.get_width() / 4.26, self.screen.get_height() / 3.6))
+                    quit_button_white_resize = pygame.transform.scale(quit_button_white, (
+                    self.screen.get_width() / 4.26, self.screen.get_height() / 3.6))
+                    quit_button_rect = quit_button_white_resize.get_rect(
+                        center=(self.screen.get_width() / 2, self.screen.get_height() / 1.3))
+
+                    play_button_white_resize = pygame.transform.scale(play_button_white, (
+                    self.screen.get_width() / 4.26, self.screen.get_height() / 3.6))
+                    play_button_green_resize = pygame.transform.scale(play_button_green, (
+                    self.screen.get_width() / 4.26, self.screen.get_height() / 3.6))
+                    play_button_rect = play_button_white_resize.get_rect(
+                        center=(self.screen.get_width() / 2, self.screen.get_height() / 2))
+
                 if event.type == pygame.QUIT:
                     self.running = False
+                    sys.exit()
+
                 elif event.type == pygame.MOUSEMOTION:
                     if play_button_rect.collidepoint(event.pos):
-                        play_button = play_button_green
+                        play_button = play_button_green_resize
                     else:
-                        play_button = play_button_white
+                        play_button = play_button_white_resize
                     if quit_button_rect.collidepoint(event.pos):
-                        quit_button = quit_button_red
+                        quit_button = quit_button_red_resize
                     else:
-                        quit_button = quit_button_white
+                        quit_button = quit_button_white_resize
                 elif event.type == pygame.MOUSEBUTTONUP:
                     if play_button_rect.collidepoint(event.pos):
 
@@ -193,8 +223,9 @@ class Game:
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit()
-                    exit()
+                    self.running = False
+                    sys.exit()
+
                 elif event.type == pygame.MOUSEMOTION:
                     if resume_rect.collidepoint(event.pos):
                         resume_button = resume_button_gray
@@ -226,7 +257,7 @@ class Game:
                         self.options_menu()  # Afficher le menu des options
 
 
-                elif event.type == pygame.KEYDOWN:
+                elif event.type == pygame.KEYUP:
                     if event.key == pygame.K_ESCAPE:
                         self.is_paused = False  # Reprendre le jeu
             pygame.display.flip()
@@ -249,9 +280,11 @@ class Game:
         level_select = pygame.transform.scale(level_select,(100,100))
 
         volume_rect = volume.get_rect(center = (self.screen.get_width() / 8.5 ,self.screen.get_height() / 2.05))
-        mute_rect = volume_rect
         level_select_rect = level_select.get_rect(center = (self.screen.get_width()/8.5,self.screen.get_height() / 1.2))
-        volume_button = volume
+        if self.mute == False:
+            volume_button = volume
+        else:
+            volume_button = mute
         pygame.display.flip()
 
         # Waiting for an input to close the options
@@ -265,12 +298,14 @@ class Game:
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit()
+                    sys.exit()
                 elif event.type == pygame.MOUSEBUTTONUP:
-                    if volume_button == volume and volume_rect.collidepoint(event.pos):
+                    if volume_button == volume and volume_rect.collidepoint(event.pos) and not(self.mute):
                         volume_button = mute
+                        self.mute = True
                     else:
                         volume_button = volume
+                        self.mute = False
                     if level_select_rect.collidepoint(event.pos):
                         self.waiting = False
                         self.is_paused = False
@@ -297,7 +332,8 @@ class Game:
     def change_level(self,new_level):
         self.level = new_level
         self.player = [Player(self, self.level, self.screen.get_width() / 64, self.level.pos_y, 1),
-                       Player(self, self.level, self.screen.get_width() / 1.067, self.level.pos_y, -1)]
+                       Player(self, self.level, self.screen.get_width() / 1.067, self.level.pos_y, -1),
+                       ]
         self.all_players = pygame.sprite.Group()
         for player in self.player:
             self.all_players.add(player)
@@ -307,35 +343,41 @@ class Game:
     def level_menu(self):
         self.in_menu = False
         background = pygame.image.load("assets_game_PT/background/Background_menu.png").convert_alpha()
-        background = pygame.transform.scale(background, (self.screen.get_width(),self.screen.get_height()))
+        background_resize = pygame.transform.scale(background,(self.screen.get_width(),self.screen.get_height()))
 
         titre = pygame.image.load("assets_game_PT/logo/MASTER_horozontal (2).png").convert_alpha()
-        titre_rect = titre.get_rect(center = (self.screen.get_width()/2,self.screen.get_height()/6))
+        titre_resize = pygame.transform.scale(titre,(self.screen.get_width()/2.56,self.screen.get_height()/2.4))
+        titre_rect = titre_resize.get_rect(center = (self.screen.get_width()/2,self.screen.get_height()/6))
 
         level_overlay_rect = (self.screen.get_width() /3,self.screen.get_height()/4.5,self.screen.get_width()/3.1,self.screen.get_height()/1.44)
 
         levels = [Level(self.screen,1),
-                  Level(self.screen,2),]
+                  Level(self.screen,2),
+                  Level(self.screen,3)]
 
         font = pygame.font.Font(None, 50)
         buttons = []
+
         for i,level in enumerate(levels):
             text = font.render(f"Level {i+1}", True, (255, 255, 255))
             rect = text.get_rect(center = (self.screen.get_width()/2,200 + i*100))
             buttons.append((text,rect,level))
 
-
-        self.screen.blit(background,(0,0))
+        self.screen.blit(background_resize,(0,0))
         pygame.draw.rect(self.screen, (50,30,30), level_overlay_rect, border_radius=20)
-        self.screen.blit(titre,titre_rect)
+        self.screen.blit(titre_resize,titre_rect)
         for text,rect,_ in buttons:
-            self.screen.blit(text, rect)
+            self.screen.blit(text,rect)
             pygame.display.flip()
 
         pygame.display.flip()
         run = True
         while run:
             for event in pygame.event.get():
+                if event.type == pygame.VIDEORESIZE:
+                    background_resize = pygame.transform.scale(background,(self.screen.get_width(), self.screen.get_height()))
+                    pygame.display.flip()
+
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         run = False

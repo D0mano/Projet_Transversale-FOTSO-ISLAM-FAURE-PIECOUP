@@ -1,4 +1,5 @@
 import pygame
+import sys
 from obstacle import Obstacle
 pygame.init()
 
@@ -6,7 +7,8 @@ class Level:
     def __init__(self,screen,level=2):
         self.lv_number = level
         self.background = ["assets_game_PT/background/Background_1-fotor2.png",
-                           "assets_game_PT/background/Background_space.png"]
+                           "assets_game_PT/background/Background_space.png",
+                           "assets_game_PT/background/Background_under_water.png"]
         self.screen = screen
 
         self.true_image = pygame.image.load(self.background[self.lv_number-1]).convert_alpha()
@@ -21,7 +23,11 @@ class Level:
         elif self.lv_number == 2:
             self.pos_y = screen.get_height()/1.22
             self.gravity = 20
-            self.obstacle = Obstacle(self,screen.get_width()/2-40,360)
+            self.obstacle = Obstacle(self,screen.get_width()/2-40,self.screen.get_height()/2)
+        elif self.lv_number == 3:
+            self.pos_y = screen.get_height()/1.22
+            self.gravity = 80
+            self.obstacle = Obstacle(self,screen.get_width()/2-40,self.screen.get_height()/2)
         self.all_obstacle = pygame.sprite.Group()
         self.all_obstacle.add(self.obstacle)
 
