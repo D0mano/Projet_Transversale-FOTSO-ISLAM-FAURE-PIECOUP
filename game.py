@@ -360,7 +360,7 @@ class Game:
 
         for i,level in enumerate(levels):
             text = font.render(f"Level {i+1}", True, (255, 255, 255))
-            rect = text.get_rect(center = (self.screen.get_width()/2,200 + i*100))
+            rect = text.get_rect(center = (self.screen.get_width()/2,self.screen.get_height()/3.6 + i*self.screen.get_height()/7.2))
             buttons.append((text,rect,level))
 
         self.screen.blit(background_resize,(0,0))

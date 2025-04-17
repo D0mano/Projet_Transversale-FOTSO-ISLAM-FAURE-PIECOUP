@@ -11,8 +11,8 @@ run = True
 
 # Initialize level and game objects
 
-ecran = pygame.display.set_mode((0,0),pygame.RESIZABLE)
-level = Level(1,ecran)
+ecran = pygame.display.set_mode((0,0),pygame.FULLSCREEN)
+level = Level(ecran)
 pygame.display.set_caption("CanonMaster")
 
 
