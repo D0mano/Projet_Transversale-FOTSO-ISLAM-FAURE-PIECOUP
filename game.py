@@ -2,7 +2,7 @@ import sys
 import pygame
 from player import Player
 from level import Level
-
+from power import PowerManager
 class Game:
     def __init__(self,level,ecran):
         self.is_playing = False
@@ -10,6 +10,7 @@ class Game:
         self.screen = ecran
         self.player =[Player(self,level,self.screen.get_width()/64,level.pos_y,1),Player(self,level,self.screen.get_width()/1.067,level.pos_y,-1)]
         self.level = level
+        self.power_manager = PowerManager(self)
         for player in self.player:
             self.all_players.add(player)
         self.is_paused = False
@@ -40,6 +41,8 @@ class Game:
         self.screen.blit(self.player[self.current_player].show_info()[1],
                    (self.player[self.current_player].rect.x + self.player[self.current_player].direction * 50, 600))
 
+        self.power_manager.update()
+        self.power_manager.draw(self.screen)
         # Load the canon of all the players
         for players in self.player:
             for projectile in players.all_projectile:
@@ -49,6 +52,8 @@ class Game:
         for players in self.player:
             players.all_projectile.draw(self.screen)
             players.update_health_bar(self.screen)
+
+
 
         pygame.display.flip()
 

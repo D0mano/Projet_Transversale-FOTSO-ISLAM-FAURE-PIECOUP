@@ -50,7 +50,8 @@ python main.py
 - `player.py` : Logique des joueurs et des canons
 - `level.py` : Configuration des niveaux et de la physique
 - `obstacle.py` : Gestion des obstacles
-- `Boulet_Canon.py` : Comportement des projectiles
+- `boulet_canon.py` : Comportement des projectiles
+- `power.py` : Gestion des différents pouvoir
 
 ## Les niveaux
 
@@ -93,7 +94,8 @@ CanonMaster/
 ├── player.py                # Gestion des joueurs
 ├── level.py                 # Configuration des niveaux
 ├── obstacle.py              # Gestion des obstacles
-├── Boulet_Canon.py          # Logique des projectiles
+├── boulet_canon.py          # Logique des projectiles
+├── power.py                 # Gestion des povoirs
 │
 └── assets_game_PT/          # Ressources du jeu
     ├── background/          # Images de fond
@@ -101,6 +103,7 @@ CanonMaster/
     ├── canon/               # Images des canons
     ├── logo/                # Logos du jeu
     ├── obstacles/           # Images des obstacles
+    ├── power_images/        # Images des superpouvoirs
     └── sound/               # Effets sonores
 ```
 
@@ -121,7 +124,12 @@ Pour créer un nouvel obstacle, modifiez le fichier `obstacle.py` :
 
 ## Crédits
 
-Ce jeu a été développé en utilisant :
+Ce jeu a été développé par :
+- FOTSO Nolann
+- ISLAM Rafael
+- PIECOUP Tom
+- FAURE Mathieu
+En utilisant : 
 - Python et Pygame pour le moteur de jeu
 - Assets graphiques et sonores provenant de sources diverses
 

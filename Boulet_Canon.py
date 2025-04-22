@@ -55,6 +55,7 @@ class Projectile(pygame.sprite.Sprite):
                 self.explosion_sound.play()
                 self.kill()
                 player.damage(self.user.attack)
+
         for obstacle in self.game.check_collision(self,self.level.all_obstacle):
             self.explosion_sound.play()
             self.kill()
