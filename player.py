@@ -33,7 +33,9 @@ class Player(pygame.sprite.Sprite):
         self.rect_pied.y = y
         self.direction = direction
         self.power_effects = []
+        self.explosion_mode = False
         self.alive = True
+        self.projectile_size = 1
 
     def update_health_bar(self,surface):
         # We define a color for the health bar
@@ -77,7 +79,7 @@ class Player(pygame.sprite.Sprite):
             self.health -= amount
         else:
             self.alive = False
-            self.game.game_over()
+           # self.game.game_over()
 
 
     def cal_pos(self):
@@ -97,10 +99,21 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.canon.get_rect(center=self.rect.center)
 
     def fire(self):
-        self.all_projectile.add(Projectile(self,self.level,self.game))
+        projectile = Projectile(self,self.level,self.game)
+        self.all_projectile.add(projectile)
         self.reinitialize_canon()
-        print(f"player {self.direction} :{self.attack}")
         self.update_power_effects()
+        print(self.explosion_mode)
+        if self.projectile_size > 1:
+            projectile.image = pygame.transform.scale(projectile.image,
+                                                      (int(20 * self.projectile_size),
+                                                       int(20 * self.projectile_size)))
+            projectile.rect = projectile.image.get_rect(center=projectile.rect.center)
+
+            # Activer le mode explosion si nécessaire
+        if self.explosion_mode:
+            projectile.explosive = True
+            self.explosion_mode = False  # Désactiver après utilisation
 
     def aim_up(self):
         if self.angle < 90:

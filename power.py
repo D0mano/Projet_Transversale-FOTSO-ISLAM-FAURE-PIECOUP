@@ -14,8 +14,8 @@ class Power(pygame.sprite.Sprite):
         self.power_types = {
             1: {"name": "damage", "image": "assets_game_PT/powers_images/Attack_boost.png"},
             2: {"name": "heal", "image": "assets_game_PT/powers_images/green_cross.png"},
-            3: {"name": "explosion", "image": "assets_game_PT/power/area_damage.png"},
-            4: {"name": "size", "image": "assets_game_PT/power/size_power.png"}
+            4: {"name": "explosion", "image": "assets_game_PT/powers_images/area_damage.png"},
+            3: {"name": "size", "image": "assets_game_PT/powers_images/green_cross.png"}
         }
 
 
@@ -77,6 +77,7 @@ class Power(pygame.sprite.Sprite):
             # Active le mode explosion pour le prochain tir
             player.explosion_mode = True
 
+
         elif power_name == "size":
             # Augmente la taille du boulet pour le prochain tir
             player.projectile_size = 2  # Facteur multiplicateur de taille
@@ -122,7 +123,7 @@ class PowerManager:
         y = random.randint(int(min_y), int(max_y))
 
         # Choisir un type de pouvoir aléatoire
-        power_type = random.randint(1, 2)
+        power_type = random.randint(1, 4)
 
         # Créer le pouvoir et l'ajouter au groupe
         power = Power(self.game, x, y, power_type)

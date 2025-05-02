@@ -17,7 +17,7 @@ CanonMaster est un jeu d'artillerie en tour par tour où deux joueurs s'affronte
 
 ### Prérequis
 
-- Python 3.x
+- Python 3.12
 - Pygame
 
 ### Installation des dépendances
@@ -129,7 +129,8 @@ Ce jeu a été développé par :
 - ISLAM Rafael
 - PIECOUP Tom
 - FAURE Mathieu
-En utilisant : 
+
+En utilisant :   
 - Python et Pygame pour le moteur de jeu
 - Assets graphiques et sonores provenant de sources diverses
 
