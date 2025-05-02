@@ -21,6 +21,7 @@ class Game:
         self.current_player = 0 #Represent the index of the player currently playing
 
         self.click_sound = pygame.mixer.Sound("assets_game_PT/sound/pop-sound-effect-197846.mp3")
+        pygame.mixer.music.load("assets_game_PT/sound/cell_music.mp3")
 
     def start(self,dt):
         self.in_menu = False
@@ -103,6 +104,8 @@ class Game:
 
 
     def menu(self):
+        pygame.mixer.music.play(-1)
+
         # We load the different asset for the menu
 
         background = pygame.image.load("assets_game_PT/background/Background_menu.png").convert_alpha()
@@ -153,10 +156,13 @@ class Game:
                         self.level_menu()  # Let you select the level you wants
                         self.in_menu = False
                     elif quit_button_rect.collidepoint(event.pos):
+                        pygame.mixer.music.stop()
                         self.running = False  # Quit the game when quit is clicked
             pygame.display.flip()  # Update the display to the screen
 
     def pause_menu(self):
+        pygame.mixer.music.play(-1)
+
         # Dessiner un fond semi-transparent
         pause_overlay = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA)
         pause_overlay.fill((0, 0, 0, 180))  # Couleur noire avec transparence
@@ -220,8 +226,10 @@ class Game:
                 elif event.type == pygame.MOUSEBUTTONUP:
                     self.click_sound.play()
                     if resume_rect.collidepoint(event.pos):
+                        pygame.mixer.music.stop()
                         self.is_paused = False  # Reprendre le jeu
                     elif quit_rect.collidepoint(event.pos):
+                        pygame.mixer.music.stop()
                         self.game_over() # Retour au menu principal
                         self.in_menu = True
                         self.is_paused = False
@@ -273,8 +281,10 @@ class Game:
                 elif event.type == pygame.MOUSEBUTTONUP:
                     self.click_sound.play()
                     if volume_button == volume and volume_rect.collidepoint(event.pos):
+                        pygame.mixer.music.stop()
                         volume_button = mute
                     else:
+                        pygame.mixer.music.play(-1)
                         volume_button = volume
                     if level_select_rect.collidepoint(event.pos):
                         self.waiting = False
@@ -349,6 +359,7 @@ class Game:
                     self.click_sound.play()
                     for _,rect,level in buttons:
                         if rect.collidepoint(event.pos):
+                            pygame.mixer.music.stop()
                             self.change_level(level)
                             run = False
                             self.is_playing = True
