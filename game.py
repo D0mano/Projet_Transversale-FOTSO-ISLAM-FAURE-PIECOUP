@@ -20,6 +20,8 @@ class Game:
 
         self.current_player = 0 #Represent the index of the player currently playing
 
+        self.click_sound = pygame.mixer.Sound("assets_game_PT/sound/pop-sound-effect-197846.mp3")
+
     def start(self,dt):
         self.in_menu = False
         self.level.load_level()
@@ -145,6 +147,7 @@ class Game:
                     else:
                         quit_button = quit_button_white
                 elif event.type == pygame.MOUSEBUTTONUP:
+                    self.click_sound.play()
                     if play_button_rect.collidepoint(event.pos):
 
                         self.level_menu()  # Let you select the level you wants
@@ -215,6 +218,7 @@ class Game:
                         quit_button = quit_button_white
 
                 elif event.type == pygame.MOUSEBUTTONUP:
+                    self.click_sound.play()
                     if resume_rect.collidepoint(event.pos):
                         self.is_paused = False  # Reprendre le jeu
                     elif quit_rect.collidepoint(event.pos):
@@ -267,6 +271,7 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                 elif event.type == pygame.MOUSEBUTTONUP:
+                    self.click_sound.play()
                     if volume_button == volume and volume_rect.collidepoint(event.pos):
                         volume_button = mute
                     else:
@@ -341,6 +346,7 @@ class Game:
                         run = False
                         self.in_menu = True
                 if event.type == pygame.MOUSEBUTTONUP:
+                    self.click_sound.play()
                     for _,rect,level in buttons:
                         if rect.collidepoint(event.pos):
                             self.change_level(level)
