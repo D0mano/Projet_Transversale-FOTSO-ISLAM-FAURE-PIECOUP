@@ -1,6 +1,6 @@
 import pygame
 import time
-from Boulet_Canon import Projectile
+from boulet_canon import Projectile
 
 pygame.init()
 pygame.font.init()
@@ -32,6 +32,7 @@ class Player(pygame.sprite.Sprite):
         self.rect_pied.x = x
         self.rect_pied.y = y
         self.direction = direction
+        self.power_effects = []
         self.alive = True
 
     def update_health_bar(self,surface):
@@ -53,6 +54,22 @@ class Player(pygame.sprite.Sprite):
         pygame.draw.rect(surface,bar_back_color,bar_back_pos)
         pygame.draw.rect(surface,bar_color,bar_pos)
 
+    def update_power_effects(self):
+        # Si le joueur a tiré, réduire la durée des effets de pouvoir
+        effects_to_remove = []
+        for effect in self.power_effects:
+            effect["duration"] -= 1
+            if effect["duration"] <= 0:
+                effects_to_remove.append(effect)
+                # Réinitialiser les effets quand ils expirent
+                if effect["type"] == "damage":
+                    self.attack = 20  # Valeur de base
+                elif effect["type"] == "size":
+                    self.projectile_size = 1
+
+        # Supprimer les effets expirés
+        for effect in effects_to_remove:
+            self.power_effects.remove(effect)
 
 
     def damage(self, amount):
@@ -61,6 +78,8 @@ class Player(pygame.sprite.Sprite):
         else:
             self.alive = False
             self.game.game_over()
+
+
     def cal_pos(self):
         if self.direction == 1:
             self.rect.x = self.game.screen.get_width() / 64
@@ -80,6 +99,8 @@ class Player(pygame.sprite.Sprite):
     def fire(self):
         self.all_projectile.add(Projectile(self,self.level,self.game))
         self.reinitialize_canon()
+        print(f"player {self.direction} :{self.attack}")
+        self.update_power_effects()
 
     def aim_up(self):
         if self.angle < 90:

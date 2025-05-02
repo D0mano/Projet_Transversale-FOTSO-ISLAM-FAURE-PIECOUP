@@ -11,9 +11,11 @@ run = True
 
 # Initialize level and game objects
 
-ecran = pygame.display.set_mode((0,0),pygame.RESIZABLE)
+ecran = pygame.display.set_mode((0,0),pygame.FULLSCREEN)
 level = Level(ecran)
 pygame.display.set_caption("CanonMaster")
+
+
 game = Game(level,ecran)
 
 while run: # Main loop for the game
@@ -23,11 +25,12 @@ while run: # Main loop for the game
     # We verify if the game is playing
     if game.is_playing:
         game.start(dt)
-    elif game.in_menu:
+    else:
         game.menu()
         run = game.running
 
-    # Handle input events for quitting
+
+    # Handle input events for quitting and menu interaction
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
@@ -35,3 +38,4 @@ while run: # Main loop for the game
     pygame.display.flip() # Update the display to the screen
 
 pygame.quit()
+
