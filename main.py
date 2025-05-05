@@ -9,7 +9,7 @@ clock = pygame.time.Clock()
 
 run = True
 
-# Initialize level and game objects
+# Initialize level and game object
 
 ecran = pygame.display.set_mode((0,0),pygame.FULLSCREEN)
 level = Level(ecran)
