@@ -15,7 +15,7 @@ class Power(pygame.sprite.Sprite):
             1: {"name": "damage", "image": "assets_game_PT/powers_images/Attack_boost.png"},
             2: {"name": "heal", "image": "assets_game_PT/powers_images/green_cross.png"},
             4: {"name": "explosion", "image": "assets_game_PT/powers_images/area_damage.png"},
-            3: {"name": "size", "image": "assets_game_PT/powers_images/green_cross.png"}
+            3: {"name": "size", "image": "assets_game_PT/powers_images/Image_Taille_Balle.png"}
         }
 
 

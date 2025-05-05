@@ -103,7 +103,6 @@ class Player(pygame.sprite.Sprite):
         self.all_projectile.add(projectile)
         self.reinitialize_canon()
         self.update_power_effects()
-        print(self.explosion_mode)
         if self.projectile_size > 1:
             projectile.image = pygame.transform.scale(projectile.image,
                                                       (int(20 * self.projectile_size),

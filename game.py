@@ -24,7 +24,7 @@ class Game:
             self.mute = True
         else:
             self.mute = False
-
+        self.all_explosion = pygame.sprite.Group()
         self.click_sound = pygame.mixer.Sound("assets_game_PT/sound/pop-sound-effect-197846.mp3")
         self.menu_music = "assets_game_PT/sound/cell_music.mp3"
         self.levels_music = ["assets_game_PT/sound/level1_music.mp3","assets_game_PT/sound/level2_music.mp3","assets_game_PT/sound/level3_music.mp3"]
@@ -35,6 +35,9 @@ class Game:
 
     def stop_music(self):
         pygame.mixer.music.stop()
+
+    def music_is_playing(self):
+        return pygame.mixer.music.get_busy()
 
     def start(self,dt):
         self.in_menu = False
@@ -53,6 +56,11 @@ class Game:
 
         self.power_manager.update()
         self.power_manager.draw(self.screen)
+
+        # Mettre à jour et dessiner les explosions
+        self.all_explosion.update()
+        self.all_explosion.draw(self.screen)
+
         # Load the canon of all the players
         for players in self.player:
             for projectile in players.all_projectile:
@@ -120,7 +128,8 @@ class Game:
 
 
     def menu(self):
-        self.play_music(self.menu_music)
+        if not self.music_is_playing():
+            self.play_music(self.menu_music)
 
         # We load the different asset for the menu
 
@@ -267,6 +276,8 @@ class Game:
                         self.is_paused = False  # Reprendre le jeu
                     elif quit_rect.collidepoint(event.pos):
                         self.game_over() # Retour au menu principal
+                        self.stop_music()
+                        self.play_music(self.menu_music)
                         self.in_menu = True
                         self.is_paused = False
                     elif options_rect.collidepoint(event.pos):
@@ -328,13 +339,12 @@ class Game:
                         volume_button = volume
                         self.mute = False
                     if level_select_rect.collidepoint(event.pos):
+                        self.stop_music()
+                        self.play_music(self.menu_music)
                         self.waiting = False
                         self.is_paused = False
                         self.is_playing = False
                         self.level_menu()
-
-
-
 
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
@@ -342,6 +352,7 @@ class Game:
         if self.is_paused:
             self.screen.blit(backgrounds_copy,(0,0))
             pygame.display.flip()
+
 
 
     def switch_turn(self):
@@ -363,6 +374,9 @@ class Game:
 
     def level_menu(self):
         self.in_menu = False
+        if not self.music_is_playing():
+            self.play_music(self.menu_music)
+
         background = pygame.image.load("assets_game_PT/background/Background_menu.png").convert_alpha()
         background_resize = pygame.transform.scale(background,(self.screen.get_width(),self.screen.get_height()))
 
@@ -406,7 +420,7 @@ class Game:
                     self.click_sound.play()
                     for _,rect,level in buttons:
                         if rect.collidepoint(event.pos):
-                            pygame.mixer.music.stop()
+                            self.stop_music()
                             self.change_level(level)
                             run = False
                             self.is_playing = True
