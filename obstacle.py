@@ -7,11 +7,13 @@ class Obstacle(pygame.sprite.Sprite):
         self.level = level
         self.type_obstacle = ["assets_game_PT/obstacles/muraille.png",
                               "assets_game_PT/obstacles/meteorite.png",
-                              "assets_game_PT/obstacles/muraille.png"]
+                              "assets_game_PT/obstacles/coraux.png"]
         self.image = pygame.image.load(self.type_obstacle[self.level.lv_number-1]).convert_alpha()
         if level.lv_number == 1:
             self.image = pygame.transform.scale(self.image, (40, 120))
         elif level.lv_number == 2:
+            self.image = pygame.transform.scale(self.image, (100, 200))
+        elif level.lv_number == 3:
             self.image = pygame.transform.scale(self.image, (100, 200))
         self.rect = self.image.get_rect()
         self.rect.y = y
