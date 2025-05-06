@@ -27,7 +27,8 @@ class Level:
         elif self.lv_number == 3:
             self.pos_y = screen.get_height()/1.22
             self.gravity = 80
-            self.obstacle = Obstacle(self,screen.get_width()/2,self.screen.get_height()/2)
+            self.obstacle = Obstacle(self,screen.get_width()/2-40,self.screen.get_height()/2)
+
         self.all_obstacle = pygame.sprite.Group()
         self.all_obstacle.add(self.obstacle)
 

@@ -31,7 +31,7 @@ class Obstacle(pygame.sprite.Sprite):
             if self.rect.y < self.level.screen.get_height()/102 or self.rect.y >= self.level.pos_y - self.level.screen.get_height()/4.8:
                 self.direction *= -1
         elif self.level.lv_number == 3:
-            if self.rect.y < self.level.screen.get_height()/102 or self.rect.y >= self.level.pos_y - self.level.screen.get_height()/14:
+            if self.rect.y < self.level.screen.get_height()/102 or self.rect.y >= self.level.pos_y - self.level.screen.get_height()/4.8:
                 self.direction *= -1
 
     def cal_pos_obs(self):
