@@ -96,11 +96,15 @@ class Game:
                     self.switch_turn()
 
                 if self.current_player == 0:
-                    if event.key == pygame.K_RIGHT:
+                    if event.key == pygame.K_d:
                         self.player[self.current_player].power_up()
 
-                    elif event.key == pygame.K_LEFT:
+                    elif event.key == pygame.K_q:
                         self.player[self.current_player].power_down()
+                    elif event.key == pygame.K_z:
+                        self.player[self.current_player].aim_up()
+                    elif event.key == pygame.K_s:
+                        self.player[self.current_player].aim_down()
                 else:
                     if event.key == pygame.K_LEFT:
                         self.player[self.current_player].power_up()
@@ -108,11 +112,11 @@ class Game:
                     elif event.key == pygame.K_RIGHT:
                         self.player[self.current_player].power_down()
 
-                if event.key == pygame.K_UP:
-                    self.player[self.current_player].aim_up()
+                    elif event.key == pygame.K_UP:
+                        self.player[self.current_player].aim_up()
 
-                elif event.key == pygame.K_DOWN:
-                    self.player[self.current_player].aim_down()
+                    elif event.key == pygame.K_DOWN:
+                        self.player[self.current_player].aim_down()
 
 
     def game_over(self):
@@ -122,9 +126,13 @@ class Game:
             player.cal_pos()
         for powers in self.power_manager.all_powers:
             powers.kill()
+        self.stop_music()
         self.current_player = 0
         self.is_playing = False
         self.in_menu = True
+        for player in self.all_players:
+            player.alive = True
+
 
 
     def menu(self):
@@ -370,6 +378,8 @@ class Game:
         for player in self.player:
             self.all_players.add(player)
             self.current_player = 0
+        for powers in self.power_manager.all_powers:
+            powers.kill()
 
 
     def level_menu(self):
@@ -425,4 +435,48 @@ class Game:
                             run = False
                             self.is_playing = True
 
-    # def end_game(self):
+    def end_game(self):
+        P1_win = pygame.image.load("assets_game_PT/background/P1_win.png")
+        P2_win = pygame.image.load("assets_game_PT/background/P2_win.png")
+        for player in self.all_players:
+            if player.direction == 1:
+                if not player.alive:
+                    pancarte = P2_win
+            if player.direction == -1:
+                if not player.alive:
+                    pancarte = P1_win
+        pancarte.set_colorkey((126, 217, 87))
+        pancarte.convert_alpha()
+        pancarte_rect = pancarte.get_rect(center=(self.screen.get_width()/2,self.screen.get_height()/2))
+        lv_select = pygame.image.load("assets_game_PT/button/Selecteur_level.png").convert_alpha()
+        lv_select = pygame.transform.scale(lv_select,(90,90))
+        lv_select_rect = lv_select.get_rect(center=(self.screen.get_width()/2.4,self.screen.get_height()/1.7))
+        replay_button = pygame.image.load("assets_game_PT/button/Replay_button-removebg-preview.png")
+        replay_button = pygame.transform.scale(replay_button,(90,90))
+        replay_button.set_colorkey((0,0,0))
+        replay_button_rect = replay_button.get_rect(center=(self.screen.get_width()/1.7,self.screen.get_height()/1.7))
+
+        backgrounds_copy = self.screen.copy()
+        end = True
+        while end:
+            #self.screen.blit(backgrounds_copy,(0,0))
+            self.screen.blit(pancarte,pancarte_rect)
+            self.screen.blit(lv_select,lv_select_rect)
+            self.screen.blit(replay_button,replay_button_rect)
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    self.click_sound.play()
+                    if replay_button_rect.collidepoint(event.pos):
+                        print("test")
+                        end = False
+                        self.game_over()
+                        self.change_level(self.level)
+                        self.in_menu = False
+                        self.is_playing = True
+                    if lv_select_rect.collidepoint(event.pos):
+                        end = False
+                        self.game_over()
+                        self.level_menu()
+            pygame.display.flip()
+
+

@@ -7,7 +7,9 @@ class Explosion(pygame.sprite.Sprite):
         self.images = []
         # Chargez les images d'explosion (vous devrez les créer ou les télécharger)
         for i in range(1, 9):  # Supposons que vous avez 8 images d'explosion
-            img = pygame.image.load(f"assets_game_PT/animations/explosion_nuke/Explosion_{i}.jpg").convert_alpha()
+            img = pygame.image.load(f"assets_game_PT/animations/explosion_nuke/Explosion_{i}.jpg")
+            img.set_colorkey((255,255,255))
+            img.convert_alpha()
             # Redimensionner selon la taille souhaitée
             #img = pygame.transform.scale(img, (int(64 * size), int(64 * size)))
             self.images.append(img)
@@ -17,7 +19,7 @@ class Explosion(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (x, y-50)
         self.counter = 0
-        self.animation_speed = 3  # Plus petit = plus rapide
+        self.animation_speed = 5  # Plus petit = plus rapide
 
     def update(self):
         # Mettre à jour le compteur

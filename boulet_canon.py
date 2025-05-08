@@ -18,8 +18,8 @@ class Projectile(pygame.sprite.Sprite):
         self.canon_sound = pygame.mixer.Sound("assets_game_PT/sound/sf_canon_01.mp3")
         self.explosion_sound = pygame.mixer.Sound("assets_game_PT/sound/medium-explosion-40472.mp3")
         self.explosive = False
-        self.explosion_radius = 100
-        self.explosion_damage = 15
+        self.explosion_radius = 200
+        self.explosion_damage = 30
 
         if player.direction == 1:
             canon_length = 13
@@ -46,9 +46,7 @@ class Projectile(pygame.sprite.Sprite):
 
     def create_explosion(self):
         # Effet visuel de l'explosion
-        explosion_sound = pygame.mixer.Sound("assets_game_PT/sound/pop-sound-effect-197846.mp3")
-        explosion_sound.play()
-        explosion = Explosion(self.rect.centerx,self.rect.centery,2)
+        explosion = Explosion(self.rect.centerx,self.rect.centery,4)
         self.game.all_explosion.add(explosion)
 
         # Vérifier les joueurs dans la zone d'explosion

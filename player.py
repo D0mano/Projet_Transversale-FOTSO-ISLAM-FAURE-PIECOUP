@@ -9,6 +9,7 @@ font = pygame.font.Font(None,36)
 class Player(pygame.sprite.Sprite):
     def __init__(self,game,level,x,y,direction = 1,):
         super().__init__()
+        self.direction = direction
         self.game = game
         self.level = level
         self.attack = 20
@@ -79,7 +80,7 @@ class Player(pygame.sprite.Sprite):
             self.health -= amount
         else:
             self.alive = False
-           # self.game.game_over()
+            self.game.end_game()
 
 
     def cal_pos(self):
