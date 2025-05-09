@@ -1,23 +1,25 @@
 import pygame
 
+# Découper les frames
+
 
 class Explosion(pygame.sprite.Sprite):
-    def __init__(self, x, y, size=1):
+    def __init__(self, x, y,col,row,frame_width,frame_height,size=1):
         super().__init__()
+        self.img = pygame.image.load(f"assets_game_PT/animations/explosion_nuke/Explosion.png")
         self.images = []
         # Chargez les images d'explosion (vous devrez les créer ou les télécharger)
-        for i in range(1, 9):  # Supposons que vous avez 8 images d'explosion
-            img = pygame.image.load(f"assets_game_PT/animations/explosion_nuke/Explosion_{i}.jpg")
-            img.set_colorkey((255,255,255))
-            img.convert_alpha()
-            # Redimensionner selon la taille souhaitée
-            #img = pygame.transform.scale(img, (int(64 * size), int(64 * size)))
-            self.images.append(img)
+        for r in range(row):
+            for c in range(col):
+                rect = pygame.Rect(r * frame_width, c * frame_height, frame_width, frame_height)
+                frame = self.img.subsurface(rect)
+                frame = pygame.transform.scale(frame, (int(64 * size), int(64 * size)))
+                self.images.append(frame)
 
         self.index = 0
         self.image = self.images[self.index]
         self.rect = self.image.get_rect()
-        self.rect.center = (x, y-50)
+        self.rect.center = (x, y-100)
         self.counter = 0
         self.animation_speed = 5  # Plus petit = plus rapide
 

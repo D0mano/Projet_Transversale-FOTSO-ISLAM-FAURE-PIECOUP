@@ -19,7 +19,7 @@ class Projectile(pygame.sprite.Sprite):
         self.explosion_sound = pygame.mixer.Sound("assets_game_PT/sound/medium-explosion-40472.mp3")
         self.explosive = False
         self.explosion_radius = 200
-        self.explosion_damage = 30
+        self.explosion_damage = 50
 
         if player.direction == 1:
             canon_length = 13
@@ -46,14 +46,14 @@ class Projectile(pygame.sprite.Sprite):
 
     def create_explosion(self):
         # Effet visuel de l'explosion
-        explosion = Explosion(self.rect.centerx,self.rect.centery,4)
+        explosion = Explosion(self.rect.centerx,self.rect.centery,3,3,666,666,3)
         self.game.all_explosion.add(explosion)
 
         # Vérifier les joueurs dans la zone d'explosion
         for player in self.game.all_players:
             # Calculer la distance entre le centre de l'explosion et le joueur
-            distance = math.sqrt((player.rect.centerx - self.rect.centerx) ** 2 +
-                                 (player.rect.centery - self.rect.centery) ** 2)
+
+            distance = math.sqrt((player.rect.centerx - self.rect.centerx) ** 2 +(player.rect.centery - self.rect.centery) ** 2)
 
             # Si le joueur est dans le rayon d'explosion
             if distance <= self.explosion_radius:

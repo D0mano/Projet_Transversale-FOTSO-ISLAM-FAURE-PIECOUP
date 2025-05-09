@@ -436,6 +436,8 @@ class Game:
                             self.is_playing = True
 
     def end_game(self):
+        self.stop_music()
+        pygame.mixer.Sound("assets_game_PT/sound/Happy Wheels victory green screen.mp3").play()
         P1_win = pygame.image.load("assets_game_PT/background/P1_win.png")
         P2_win = pygame.image.load("assets_game_PT/background/P2_win.png")
         for player in self.all_players:
