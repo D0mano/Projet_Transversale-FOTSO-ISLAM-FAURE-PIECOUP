@@ -1,5 +1,6 @@
 import pygame
 import time
+import math
 from boulet_canon import Projectile
 
 pygame.init()
@@ -139,6 +140,39 @@ class Player(pygame.sprite.Sprite):
         angle_text = font.render(f"Angle: {self.angle}°",True,(255,255,255))
         power_text = font.render(f"Power: {self.power}",True,(255,255,255))
         return angle_text,power_text
+
+
+    def draw_trajectory(self, surface):
+
+        points = []
+        velocity = self.power
+        angle_rad = math.radians(self.angle)
+
+
+        # Position de départ du projectile
+        start_x = self.rect.centerx
+        start_y = self.rect.centery
+        vx = velocity * math.cos(angle_rad) * self.direction
+        vy = -velocity * math.sin(angle_rad)
+        if self.level.lv_number == 1:
+            gravity = 0.25
+        if self.level.lv_number == 2:
+            gravity = 0.25
+        if self.level.lv_number == 3:
+            gravity = 0.25
+
+        for t in range(1, 10):
+            dx = vx * t
+            dy = vy * t  + 0.5 * gravity * t** 2
+            point = (int(start_x + dx), int(start_y + dy))
+
+
+            if point[1] > self.game.screen.get_height() or point[0] < 0 or point[0] > self.game.screen.get_width():
+                break
+            points.append(point)
+
+        for point in points:
+            pygame.draw.circle(surface, (255, 255, 0), point, 3)
 
 
 
