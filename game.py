@@ -48,6 +48,9 @@ class Game:
         self.screen.blit(self.player[0].canon, self.player[0].rect.topleft)
         self.screen.blit(self.player[1].canon, self.player[1].rect.topleft)
 
+        #  Display the active player's dotted trajectory
+        self.player[self.current_player].draw_trajectory(self.screen)
+
         # Load the shooting information
         self.screen.blit(self.player[self.current_player].show_info()[0],
                    (self.player[self.current_player].rect.x + self.player[self.current_player].direction * 50, 650))
